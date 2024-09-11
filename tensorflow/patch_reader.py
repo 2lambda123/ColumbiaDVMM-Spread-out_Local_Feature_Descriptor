@@ -4,12 +4,12 @@ import scipy.io as sio
 import tensorflow as tf
 import numpy as np
 import numpy.matlib as npm
-import random
 import cv2
 from tqdm import tqdm
 from preprocess import normalize_data
 
 from scipy.spatial import distance
+import secrets
 
 class SiameseDataSet(object):
     def __init__(self,
@@ -230,23 +230,23 @@ class SiameseDataSet(object):
 
         for x in pbar:
             pbar.set_description('Generating positive')
-            idx = random.randint(0, labels_size)
+            idx = secrets.SystemRandom().randint(0, labels_size)
             num_samples = count[labels[idx]]
             begin_positives = indices[labels[idx]]
 
-            offset_a, offset_p = random.sample(xrange(num_samples), 2)
+            offset_a, offset_p = secrets.SystemRandom().sample(xrange(num_samples), 2)
             while offset_a == offset_p:
-                offset_a, offset_p = random.sample(xrange(num_samples), 2)
+                offset_a, offset_p = secrets.SystemRandom().sample(xrange(num_samples), 2)
                 
             idx_a = begin_positives + offset_a
             idx_p = begin_positives + offset_p
             self._index_1.append(idx_a)
             self._index_2.append(idx_p)
             self._train_label.append(1)
-            idx_n = random.randint(0, labels_size)
+            idx_n = secrets.SystemRandom().randint(0, labels_size)
             while labels[idx_n] == labels[idx_a] and \
                             labels[idx_n] == labels[idx_p]:
-                idx_n = random.randint(0, labels_size)
+                idx_n = secrets.SystemRandom().randint(0, labels_size)
             self._index_1.append(idx_a)
             self._index_2.append(idx_n)
             self._train_label.append(0)
@@ -281,21 +281,21 @@ class SiameseDataSet(object):
 
         for x in pbar:
             pbar.set_description('Generating triplets')
-            idx = random.randint(0, labels_size)
+            idx = secrets.SystemRandom().randint(0, labels_size)
             num_samples = count[labels[idx]]
             begin_positives = indices[labels[idx]]
 
-            offset_a, offset_p = random.sample(xrange(num_samples), 2)
+            offset_a, offset_p = secrets.SystemRandom().sample(xrange(num_samples), 2)
             while offset_a == offset_p:
-                offset_a, offset_p = random.sample(xrange(num_samples), 2)
+                offset_a, offset_p = secrets.SystemRandom().sample(xrange(num_samples), 2)
             idx_a = begin_positives + offset_a
             idx_p = begin_positives + offset_p
             self._index_1.append(idx_a)
             self._index_2.append(idx_p)
-            idx_n = random.randint(0, labels_size)
+            idx_n = secrets.SystemRandom().randint(0, labels_size)
             while labels[idx_n] == labels[idx_a] and \
                             labels[idx_n] == labels[idx_p]:
-                idx_n = random.randint(0, labels_size)
+                idx_n = secrets.SystemRandom().randint(0, labels_size)
             self._index_3.append(idx_n)
 
         self._index_1 = np.array(self._index_1)
@@ -328,13 +328,13 @@ class SiameseDataSet(object):
 
         for x in pbar:
             pbar.set_description('Generating structured data')
-            idx = random.randint(0, labels_size)
+            idx = secrets.SystemRandom().randint(0, labels_size)
             num_samples = count[labels[idx]]
             begin_positives = indices[labels[idx]]
 
-            offset_a, offset_p = random.sample(xrange(num_samples), 2)
+            offset_a, offset_p = secrets.SystemRandom().sample(xrange(num_samples), 2)
             while offset_a == offset_p:
-                offset_a, offset_p = random.sample(xrange(num_samples), 2)
+                offset_a, offset_p = secrets.SystemRandom().sample(xrange(num_samples), 2)
             idx_a = begin_positives + offset_a
             idx_p = begin_positives + offset_p
             self._index_1.append(idx_a)
@@ -342,17 +342,17 @@ class SiameseDataSet(object):
             self._train_label.append(labels[idx_a])
             self._train_label.append(labels[idx_p])
             
-            idx_n = random.randint(0, labels_size)
+            idx_n = secrets.SystemRandom().randint(0, labels_size)
 
             while labels[idx_n] == labels[idx_a] and \
                             labels[idx_n] == labels[idx_p]:
-                idx_n = random.randint(0, labels_size)
+                idx_n = secrets.SystemRandom().randint(0, labels_size)
             self._index_2.append(idx_n)
-            idx_n = random.randint(0, labels_size)
+            idx_n = secrets.SystemRandom().randint(0, labels_size)
 
             while labels[idx_n] == labels[idx_a] and \
                             labels[idx_n] == labels[idx_p]:
-                idx_n = random.randint(0, labels_size)
+                idx_n = secrets.SystemRandom().randint(0, labels_size)
             self._index_2.append(idx_n)
         
         #do not use shuffle
@@ -380,24 +380,24 @@ class SiameseDataSet(object):
 
         for x in pbar:
             pbar.set_description('Generating npair triplets')
-            idx = random.randint(0, labels_size)
+            idx = secrets.SystemRandom().randint(0, labels_size)
             num_samples = count[labels[idx]]
             begin_positives = indices[labels[idx]]
 
-            offset_a, offset_p = random.sample(xrange(num_samples), 2)
+            offset_a, offset_p = secrets.SystemRandom().sample(xrange(num_samples), 2)
             
             while offset_a == offset_p:
-                offset_a, offset_p = random.sample(xrange(num_samples), 2)
+                offset_a, offset_p = secrets.SystemRandom().sample(xrange(num_samples), 2)
             idx_a = begin_positives + offset_a
             idx_p = begin_positives + offset_p
             self._index_1.append(idx_a)
             self._index_2.append(idx_p)
             self._train_label.append(labels[idx])
-            idx_n = random.randint(0, labels_size)
+            idx_n = secrets.SystemRandom().randint(0, labels_size)
 
             while labels[idx_n] == labels[idx_a] and \
                             labels[idx_n] == labels[idx_p]:
-                idx_n = random.randint(0, labels_size)
+                idx_n = secrets.SystemRandom().randint(0, labels_size)
             self._index_3.append(idx_n)
 
         self._index_1 = np.array(self._index_1)
